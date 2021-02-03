@@ -1,37 +1,47 @@
 {
-	"name": "abbot-api",
-	"version": "0.1.0",
-	"private": false,
-	"description": "A server for utilizing the PCO ecosystem to manage mentoring/coaching relationships.",
-	"repository": "https://github.com/Renddslow/abbot-api",
-	"license": "MIT",
-	"author": "Matt McElwee <mubatt@wyopub.com>",
-	"main": "dist/index.js",
-	"scripts": {},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged"
-		}
-	},
-	"lint-staged": {
-		"*.{js,css,json,md,ts,tsx}": [
-			"prettier --write"
-		]
-	},
-	"prettier": "@dmsi/prettier-config",
-	"ava": {
-		"babel": false,
-		"compileEnhancements": false,
-		"concurrency": 4,
-		"extensions": [
-			"ts"
-		],
-		"files": [
-			"src/**/*.test.ts"
-		],
-		"require": [
-			"ts-node/register"
-		],
-		"timeout": "1m"
-	}
+  "name": "abbot-api",
+  "version": "0.1.0",
+  "private": false,
+  "description": "A server for utilizing the PCO ecosystem to manage mentoring/coaching relationships.",
+  "repository": "https://github.com/Renddslow/abbot-api",
+  "license": "MIT",
+  "author": "Matt McElwee <mubatt@wyopub.com>",
+  "main": "dist/index.js",
+  "scripts": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,json,md,ts,tsx}": [
+      "prettier --write"
+    ]
+  },
+  "prettier": "@dmsi/prettier-config",
+  "ava": {
+    "babel": false,
+    "compileEnhancements": false,
+    "concurrency": 4,
+    "extensions": [
+      "ts"
+    ],
+    "files": [
+      "src/**/*.test.ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "timeout": "1m"
+  },
+  "devDependencies": {
+    "@dmsi/prettier-config": "^1.3.0",
+    "@types/node": "^14.14.22",
+    "ava": "^3.15.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.3",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
 }
