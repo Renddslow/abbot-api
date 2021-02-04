@@ -19,3 +19,20 @@ export const apiGet = async (resource, route, query = {}) => {
 
   return [err, data];
 };
+
+export const apiPost = async (resource, route, body = {}, query = {}) => {
+  const baseUrl = `https://api.planningcenteronline.com/${resource}/v2/${route}`;
+  const queryString = qs.stringify(query, { encode: false });
+  const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
+
+  const [err, data] = await catchify(
+    got(url, {
+      method: 'POST',
+      username: PCO_ID,
+      password: PCO_SECRET,
+      body: JSON.stringify(body),
+    }).json(),
+  );
+
+  return [err, data];
+};

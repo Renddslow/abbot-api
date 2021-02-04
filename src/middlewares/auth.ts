@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import getPermissions from '../utils/getPermissions';
 import { FIELDS } from '../utils/fields';
-import has = Reflect.has;
 
 const auth = (secret: string, permission?: keyof typeof FIELDS) => async (req, res, next) => {
   const header = req.headers.authorization;
@@ -38,8 +37,6 @@ const auth = (secret: string, permission?: keyof typeof FIELDS) => async (req, r
   const hasSpecifiedPermission = permission
     ? req.user.permissions.filter(({ name, allowed }) => name === permission && allowed).length
     : true;
-
-  console.log(canStillUseApp, hasSpecifiedPermission);
 
   if (!canStillUseApp || !hasSpecifiedPermission) {
     res.statusCode = 403;

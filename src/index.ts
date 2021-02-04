@@ -3,30 +3,50 @@ import bodyParser from 'body-parser';
 
 import mediator from './mediators';
 
-import { apiGet } from './mediators/pco';
+import { apiGet, apiPost } from './mediators/pco';
 
 import validateRequestBody from './middlewares/validateRequestBody';
 import json from './middlewares/json';
 import auth from './middlewares/auth';
 import createSession from './controllers/createSession';
+import getCoaches from './controllers/getCoaches';
+import getMentors from './controllers/getMentors';
+import getPeople from './controllers/getPeople';
+import getPerson from './controllers/getPerson';
+import getRelationships from './controllers/getRelationships';
+import getRelationship from './controllers/getRelationship';
+import getRequests from './controllers/getRequests';
+import getRequest from './controllers/getRequest';
 
 const PORT = process.env.PORT || 8080;
 const SECRET = process.env.SECRET;
 
 polka()
   .use(json, bodyParser.json())
-  .post('/session', validateRequestBody('new'), createSession) // make magic sign-in link
-  .get('/requests', auth(SECRET), (req, res) => {
-    res.json(req.user);
-  })
-  .put('/requests/:id', auth(SECRET), validateRequestBody('existing'), (req, res) => {}) // add coach/mentor to the workflow
-  .get('/relationships', auth(SECRET), (req, res) => {})
-  .post('/relationships', auth(SECRET), validateRequestBody('new'), (req, res) => {}) // create group
-  .put('/relationships/:id/status', auth(SECRET), validateRequestBody('existing'), (req, res) => {}) // close group
-  .get('/people', auth(SECRET), (req, res) => {})
-  .get('/coaches', auth(SECRET), (req, res) => {})
-  .get('/mentors', auth(SECRET), (req, res) => {})
+  .post('/session', validateRequestBody('new'), createSession) // TODO: send email
+  .get('/requests', auth(SECRET), getRequests)
+  .get('/requests/:id', auth(SECRET), getRequest)
+  .patch(
+    '/requests/:id/assignment',
+    auth(SECRET),
+    validateRequestBody('existing'),
+    (req, res) => {},
+  ) // TODO: add coach/mentor to the workflow
+  .get('/relationships', auth(SECRET), getRelationships)
+  .get('/relationships/:id', auth(SECRET), getRelationship)
+  .post('/relationships', auth(SECRET), validateRequestBody('new'), (req, res) => {}) // TODO: create group
+  .patch(
+    '/relationships/:id/archived',
+    auth(SECRET),
+    validateRequestBody('existing'),
+    (req, res) => {},
+  ) // close group
+  .get('/people', auth(SECRET), getPeople)
+  .get('/people/:id', auth(SECRET), getPerson)
+  .get('/coaches', auth(SECRET), getCoaches)
+  .get('/mentors', auth(SECRET), getMentors)
   .listen(PORT, () => {
     mediator.provide('pco:api:get', apiGet);
+    mediator.provide('pco:api:post', apiPost);
     console.log(`⛪️ Starting Abbot on port ${PORT}`);
   });
