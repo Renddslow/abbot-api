@@ -18,11 +18,13 @@ import getRelationship from './controllers/getRelationship';
 import getRequests from './controllers/getRequests';
 import getRequest from './controllers/getRequest';
 import updateAssignment from './controllers/updateAssignment';
-import { createGroup, login } from './mediators/accountCenter';
 import createRelationship from './controllers/createRelationship';
+import deleteRequest from './controllers/deleteRequest';
 
 const PORT = process.env.PORT || 8080;
 const SECRET = process.env.SECRET;
+
+// TODO: security
 
 polka()
   .use(json, bodyParser.json())
@@ -37,7 +39,7 @@ polka()
     validateRequestBody('existing'),
     updateAssignment,
   )
-  .delete('/requests/:id') // TODO: Close request
+  .delete('/requests/:id', auth(SECRET), deleteRequest)
 
   /** Relationships */
   .get('/relationships', auth(SECRET), getRelationships)
