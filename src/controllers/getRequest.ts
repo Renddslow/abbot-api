@@ -11,8 +11,6 @@ const getRequest = async (req, res) => {
     mentorRel ||
     (await mediator.call('pco:api:get', 'people', `workflows/101579/cards/${req.params.id}`))[1];
 
-  console.log(mentorRel, data);
-
   if (!data) {
     // TODO: 404
   }

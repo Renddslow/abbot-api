@@ -17,6 +17,7 @@ import getRelationships from './controllers/getRelationships';
 import getRelationship from './controllers/getRelationship';
 import getRequests from './controllers/getRequests';
 import getRequest from './controllers/getRequest';
+import updateAssignment from './controllers/updateAssignment';
 
 const PORT = process.env.PORT || 8080;
 const SECRET = process.env.SECRET;
@@ -30,7 +31,7 @@ polka()
     '/requests/:id/assignment',
     auth(SECRET),
     validateRequestBody('existing'),
-    (req, res) => {},
+    updateAssignment,
   ) // TODO: add coach/mentor to the workflow
   .get('/relationships', auth(SECRET), getRelationships)
   .get('/relationships/:id', auth(SECRET), getRelationship)
@@ -40,7 +41,7 @@ polka()
     auth(SECRET),
     validateRequestBody('existing'),
     (req, res) => {},
-  ) // close group
+  ) // TODO: close group
   .get('/people', auth(SECRET), getPeople)
   .get('/people/:id', auth(SECRET), getPerson)
   .get('/coaches', auth(SECRET), getCoaches)
