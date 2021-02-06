@@ -1,11 +1,17 @@
 import { get } from 'dot-prop';
 import jwt from 'jsonwebtoken';
+import ejs from 'ejs';
+import { promisify } from 'util';
+import catchify from 'catchify';
 
 import mediator from '../mediators';
-import { FIELDS, getFieldId, getFieldName } from '../utils/fields';
+import { getFieldId } from '../utils/fields';
 import getPermissions from '../utils/getPermissions';
+import path from 'path';
 
 const SECRET = process.env.SECRET;
+
+const renderFile = promisify(ejs.renderFile);
 
 const createSession = async (req, res) => {
   const { email } = get(req.body, 'data.attributes');
@@ -54,7 +60,10 @@ const createSession = async (req, res) => {
           };
         }),
     )
-  ).map((person) => jwt.sign(person, SECRET, { expiresIn: '.5y' }));
+  ).map((person) => ({
+    token: jwt.sign(person, SECRET, { expiresIn: '.5y' }),
+    ...person,
+  }));
 
   if (!permittedTokens.length) {
     res.statusCode = 403;
@@ -69,7 +78,8 @@ const createSession = async (req, res) => {
   }
 
   // email tokens
-  console.log(permittedTokens);
+  const message = await renderFile(path.join(__dirname, '../template.ejs'), { permittedTokens });
+  await mediator.call('email', email, 'Your Magic Link for Flatland Relationships', message);
 
   const plural = new Intl.PluralRules('en-US', { type: 'ordinal' });
   const map = {

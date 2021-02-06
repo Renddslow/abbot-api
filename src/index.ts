@@ -20,6 +20,7 @@ import getRequest from './controllers/getRequest';
 import updateAssignment from './controllers/updateAssignment';
 import createRelationship from './controllers/createRelationship';
 import deleteRequest from './controllers/deleteRequest';
+import email from './mediators/email';
 
 const PORT = process.env.PORT || 8080;
 const SECRET = process.env.SECRET;
@@ -60,5 +61,6 @@ polka()
   .listen(PORT, () => {
     mediator.provide('pco:api:get', apiGet);
     mediator.provide('pco:api:post', apiPost);
+    mediator.provide('email', email);
     console.log(`⛪️ Starting Abbot on port ${PORT}`);
   });
