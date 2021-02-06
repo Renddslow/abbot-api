@@ -18,6 +18,8 @@ import getRelationship from './controllers/getRelationship';
 import getRequests from './controllers/getRequests';
 import getRequest from './controllers/getRequest';
 import updateAssignment from './controllers/updateAssignment';
+import { createGroup, login } from './mediators/accountCenter';
+import createRelationship from './controllers/createRelationship';
 
 const PORT = process.env.PORT || 8080;
 const SECRET = process.env.SECRET;
@@ -25,6 +27,8 @@ const SECRET = process.env.SECRET;
 polka()
   .use(json, bodyParser.json())
   .post('/session', validateRequestBody('new'), createSession) // TODO: send email
+
+  /** Relationships */
   .get('/requests', auth(SECRET), getRequests)
   .get('/requests/:id', auth(SECRET), getRequest)
   .patch(
@@ -32,16 +36,21 @@ polka()
     auth(SECRET),
     validateRequestBody('existing'),
     updateAssignment,
-  ) // TODO: add coach/mentor to the workflow
+  )
+  .delete('/requests/:id') // TODO: Close request
+
+  /** Relationships */
   .get('/relationships', auth(SECRET), getRelationships)
   .get('/relationships/:id', auth(SECRET), getRelationship)
-  .post('/relationships', auth(SECRET), validateRequestBody('new'), (req, res) => {}) // TODO: create group
+  .post('/relationships', auth(SECRET), validateRequestBody('new'), createRelationship)
   .patch(
     '/relationships/:id/archived',
     auth(SECRET),
     validateRequestBody('existing'),
     (req, res) => {},
   ) // TODO: close group
+
+  /** People */
   .get('/people', auth(SECRET), getPeople)
   .get('/people/:id', auth(SECRET), getPerson)
   .get('/coaches', auth(SECRET), getCoaches)

@@ -15,10 +15,10 @@ const getRelationship = async (req, res) => {
     `groups/${group.data.id}/people`,
   );
   const leader = get(members, 'data', []).filter(
-    ({ attributes }) => attributes.permissions === 'administrator',
+    ({ attributes }) => attributes.permissions !== 'member',
   );
   const member = get(members, 'data', []).filter(
-    ({ attributes }) => attributes.permissions !== 'administrator',
+    ({ attributes }) => attributes.permissions === 'member',
   );
 
   const attributes = get(group, 'data.attributes', <Record<string, any>>{});
