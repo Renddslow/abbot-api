@@ -1,5 +1,6 @@
 import polka from 'polka';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import mediator from './mediators';
 
@@ -28,7 +29,7 @@ const SECRET = process.env.SECRET;
 // TODO: security
 
 polka()
-  .use(json, bodyParser.json())
+  .use(json, bodyParser.json(), cors())
   .post('/session', validateRequestBody('new'), createSession) // TODO: send email
 
   /** Relationships */
