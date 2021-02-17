@@ -3,8 +3,16 @@ import { get, has } from 'dot-prop';
 import mediator from '../mediators';
 import { parseCardData } from './getRequests';
 
-const message = (status: 'pending' | 'rejected') =>
-  status === 'pending' ? 'Pending Assignment:' : 'Assignment Declined:';
+const message = (status: 'pending' | 'rejected' | 'accepted') => {
+  switch (status) {
+    case 'accepted':
+      return 'Accepted Assignment:';
+    case 'pending':
+      return 'Pending Assignment:';
+    case 'rejected':
+      return 'Assignment Declined:';
+  }
+};
 
 const updateAssignment = async (req, res) => {
   const mentorUrl = `workflows/264250/cards/${req.params.id}`;

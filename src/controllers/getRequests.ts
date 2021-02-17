@@ -3,6 +3,13 @@ import { get } from 'dot-prop';
 import mediator from '../mediators';
 import { parsePerson } from './getPerson';
 
+const getStatus = (status: string) => {
+  if (status.includes('accepted')) return 'accepted';
+  if (status.includes('pending')) return 'pending';
+  if (status.includes('declined')) return 'rejected';
+  return 'unassigned';
+};
+
 const getAssignmentStatus = (note) => {
   if (!note) {
     return { status: 'unassigned', to: null };
@@ -13,7 +20,7 @@ const getAssignmentStatus = (note) => {
 
   if (status && to) {
     return {
-      status: status.toLowerCase().includes('pending') ? 'pending' : 'rejected',
+      status: getStatus(status.toLowerCase()),
       to,
     };
   }
